@@ -4,4 +4,30 @@
 @import 'neat';
 @import 'border-box';
 
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 // COMMENTS AREA
+textarea {
+	display: block;
+	color: gray;
+	height: 80px;
+	width: 300px;
+	border: 1px solid black;
+}
+.full {
+	padding: 3em;
+}
+.button {
+	padding-top: 1em;
+}
+.button button {
+	border: 1px solid black;
+	border-radius: 5px;
+	font-size: .9em;
+	background-color: white;
+}

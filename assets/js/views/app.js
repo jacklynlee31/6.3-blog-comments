@@ -2,7 +2,7 @@ var CommentView = Backbone.View.extend({
   // a view will create html off the page
   // what kind of element should I make?
   tagName: 'li',
-  template: AppTemplates.comments,
+  template: AppTemplates.app,
 
   //will be called when the view is first created
   initialize: function() {
