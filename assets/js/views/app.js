@@ -13,7 +13,7 @@ var CommentView = Backbone.View.extend({
   events: {
     'change .toggle': 'toggleDone',
     'click .destroy': 'burnItWithFire'
- },
+  },
 
   render: function() {
     var html = this.template(this.model.toJSON());
