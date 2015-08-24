@@ -1,15 +1,25 @@
 var AppTemplates = {};
 
 AppTemplates['app'] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<div class=\"full\">\n	<div class=\"area\">\n		<textarea>Join the discussion...</textarea>\n	</div>\n	<div class=\"button\">\n		<button>Comment</button>\n	</div>\n</div>\n";
+    return "\n<div class=\"comments\"></div>\n\n<button class=\"add\">Add New Comment</button>\n\n<form class=\"form\">\n    Name: <input type=\"text\" class=\"name\">\n    E-Mail: <input type=\"text\" class=\"email\">\n    Content: <input type=\"text\" class=\"content\">\n    <button class=\"submit\">Submit Comment</button>\n</form>\n";
 },"useData":true});
-AppTemplates['comments'] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<div class=\"above\">\n	<span>Text Goes Here</span>\n	<button>Comment</button>\n</div>\n";
+AppTemplates['comment'] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+
+  return "<div class=\"view-comments\">\n    <ul>\n        <li>\n            <a href=\""
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.email : stack1), depth0))
+    + "\">\n            <p>Name:</p> "
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.name : stack1), depth0))
+    + "\n            </a>\n            <p>Content:</p> "
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.content : stack1), depth0))
+    + "\n        </li>\n    </ul>\n</div>\n";
 },"useData":true});
 var Comment = Backbone.Model.extend({
   idAttribute: '_id',
   defaults: {
-    title: '',
+    name: '',
+    email: '',
+    content: '',
     done: false
   }
 });
@@ -21,45 +31,22 @@ var CommentList = Backbone.Collection.extend({
   url: 'http://tiny-lr.herokuapp.com/collections/jc-comments'
 });
 
-var CommentView = Backbone.View.extend({
-  // a view will create html off the page
-  // what kind of element should I make?
+ var CommentView = Backbone.View.extend({
   tagName: 'li',
-  template: AppTemplates.app,
+  template: AppTemplates.comment,
 
-  //will be called when the view is first created
   initialize: function() {
-    this.listenTo(this.model, 'change', this.render);
-  },
-
-  // events - things I want to listen for
-  events: {
-    'change .toggle': 'toggleDone',
-    'click .destroy': 'burnItWithFire'
-  },
+      this.listenTo(this.model, 'change', this.render);
+    },
 
   render: function() {
-    var html = this.template(this.model.toJSON());
-    this.$el.html(html);
-    this.$el.toggleClass('completed', this.model.get('done'));
-    return this;
-  },
-
-  // model is all of the underlying data
-
-  toggleDone: function() {
-    this.model.set('done', !this.model.get('done'));
-    this.model.save();
-  },
-
-  burnItWithFire: function() {
-    var _this = this;
-    this.$el.slideUp(function() {
-      _this.model.destroy();
-      _this.remove();
-    });
-  }
+      var html = this.template(this.model.toJSON());
+      this.$el.html(html);
+      return this;
+    }
 });
+
+//
 
 var AppView = Backbone.View.extend({
   template: AppTemplates.app,
@@ -74,35 +61,35 @@ var AppView = Backbone.View.extend({
   },
 
   events: {
-    'submit form': 'addComment',
-    'change .toggle': 'markDone'
-  },
+      'click .submit': 'submitNew',
+      'click .add': 'addNew'
+    },
 
   render: function() {
     var html = this.template(this.collection);
     var _this = this;
 
     this.$el.html(html);
-    this.collection.sortBy('done').forEach(function(todo) {
-      var childView = new CommentView({model: todo});
+    this.collection.forEach(function(comment) {
+      var childView = new CommentView({model: comment});
 
-      _this.$el.find('.todo-list')
-        .append(childView.render().$el);
+      _this.$el.find('.comments').append(childView.render().$el);
     });
 
     console.info('render');
-
-    this.$('.new-comment').focus();
     return this;
   },
 
-  addTodo: function(ev) {
-    ev.preventDefault();
+  addNew: function(ev) {
+    this.$el.find('.form').slideDown();
+  },
 
-    var title = this.$el.find('input').val();
-    this.collection.create({title: title});
-    this.$el.find('input').val('');
-  }
+  submitNew: function() {
+      var name = this.$el.find(input.name).val();
+      var email = this.$el.find(input.email).val();
+      var content = this.$el.find(input.content).val();
+      this.collection.create({name: name, email: email, content: content});
+    }
 
 });
 
