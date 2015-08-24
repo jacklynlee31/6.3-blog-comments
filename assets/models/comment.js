@@ -1,7 +1,9 @@
 var Comment = Backbone.Model.extend({
   idAttribute: '_id',
   defaults: {
-    title: '',
+    name: '',
+    email: '',
+    content: '',
     done: false
   }
 });
