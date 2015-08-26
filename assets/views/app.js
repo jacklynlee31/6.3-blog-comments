@@ -28,7 +28,7 @@ var AppView = Backbone.View.extend({
   },
 
   events: {
-      'click .submit': 'submitNew',
+      'submit form': 'submitNew',
       'click .add': 'addNew'
     },
 
@@ -51,11 +51,13 @@ var AppView = Backbone.View.extend({
     this.$el.find('.form').slideDown();
   },
 
-  submitNew: function() {
-      var name = this.$el.find(input.name).val();
-      var email = this.$el.find(input.email).val();
-      var content = this.$el.find(input.content).val();
-      this.collection.create({name: name, email: email, content: content});
-    }
+  submitNew: function(ev) {
+    ev.preventDefault();
+
+    var name = this.$el.find('input.name').val();
+    var email = this.$el.find('input.email').val();
+    var content = this.$el.find('input.content').val();
+    this.collection.create({name: name, email: email, content: content});
+  }
 
 });
