@@ -47,7 +47,7 @@ var AppView = Backbone.View.extend({
     return this;
   },
 
-  addNew: function(ev) {
+  addNew: function() {
     this.$el.find('.form').slideDown();
   },
 
