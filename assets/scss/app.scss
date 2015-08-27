@@ -3,3 +3,56 @@
 @import 'bourbon';
 @import 'neat';
 @import 'border-box';
+
+html {
+  box-sizing: border-box;
+  background-color: #d7ebf4;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.outer {
+	margin-top: 2em;
+	background-color: white;
+	padding: 1em;
+	list-style-type: none;
+	border: 1px solid black;
+	@include outer-container(600px);
+}
+
+.form input{
+	display: block;
+}
+.form {
+	display: none;
+	line-height: 2em;
+}
+button {
+	border: 1px solid black;
+	background-color: white;
+	font-size: .8em;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+.view-comments li{
+	line-height: 2em;
+	display: block;
+}
+.view-comments {
+	list-style-type: none;
+	border-bottom: 9px solid white;
+	padding: 1em;
+	background-color: #cfdde1;
+}
+a {
+	font-weight: bold;
+	text-decoration: none;
+	color: black;
+}
+
+
+
+
+
+
