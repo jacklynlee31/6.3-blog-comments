@@ -4,14 +4,14 @@ AppTemplates['app'] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"mai
     return "\n<div class=\"comments\"></div>\n\n<button class=\"add\">Add New Comment</button>\n\n<form class=\"form\">\n    Name: <input type=\"text\" class=\"name\">\n    E-Mail: <input type=\"text\" class=\"email\">\n    Content: <input type=\"text\" class=\"content\">\n    <button class=\"submit\">Submit Comment</button>\n</form>\n";
 },"useData":true});
 AppTemplates['comment'] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+    var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
 
   return "<div class=\"view-comments\">\n    <ul>\n        <li>\n            <a href=\""
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.email : stack1), depth0))
-    + "\">\n            <p>Name:</p> "
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.name : stack1), depth0))
-    + "\n            </a>\n            <p>Content:</p> "
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.content : stack1), depth0))
+    + alias3(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"email","hash":{},"data":data}) : helper)))
+    + "\">\n            "
+    + alias3(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"name","hash":{},"data":data}) : helper)))
+    + "\n            </a><br>\n            "
+    + alias3(((helper = (helper = helpers.content || (depth0 != null ? depth0.content : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"content","hash":{},"data":data}) : helper)))
     + "\n        </li>\n    </ul>\n</div>\n";
 },"useData":true});
 var Comment = Backbone.Model.extend({
@@ -61,7 +61,7 @@ var AppView = Backbone.View.extend({
   },
 
   events: {
-      'click .submit': 'submitNew',
+      'submit form': 'submitNew',
       'click .add': 'addNew'
     },
 
@@ -80,16 +80,18 @@ var AppView = Backbone.View.extend({
     return this;
   },
 
-  addNew: function(ev) {
+  addNew: function() {
     this.$el.find('.form').slideDown();
   },
 
-  submitNew: function() {
-      var name = this.$el.find(input.name).val();
-      var email = this.$el.find(input.email).val();
-      var content = this.$el.find(input.content).val();
-      this.collection.create({name: name, email: email, content: content});
-    }
+  submitNew: function(ev) {
+    ev.preventDefault();
+
+    var name = this.$el.find('input.name').val();
+    var email = this.$el.find('input.email').val();
+    var content = this.$el.find('input.content').val();
+    this.collection.create({name: name, email: email, content: content});
+  }
 
 });
 
